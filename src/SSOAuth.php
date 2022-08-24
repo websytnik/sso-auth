@@ -32,19 +32,9 @@ class SSOAuth
         return $_SESSION['sso']['identity'] ?? null;
     }
 
-    protected function hasSession() : bool
-    {
-
-    }
-
     protected function hasCookie() : bool
     {
         return isset($_COOKIE[SSOConfig::get('cookieName', 'session')]);
-    }
-
-    protected function hasBearerToken() : bool
-    {
-//        return
     }
 
     protected function detectAuthenticator()
