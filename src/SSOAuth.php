@@ -4,7 +4,6 @@ namespace websytnik\sso;
 
 use Exception;
 use websytnik\sso\authenticators\AuthenticatorInterface;
-use websytnik\sso\authenticators\HttpBearerAuthenticator;
 use websytnik\sso\authenticators\SessionAuthenticator;
 
 /**
