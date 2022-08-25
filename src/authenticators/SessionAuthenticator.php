@@ -42,7 +42,7 @@ class SessionAuthenticator implements AuthenticatorInterface
 
     protected function fetch()
     {
-        $response =  file_get_contents(SSOConfig::get('server'), false, stream_context_create(['http' => [
+        $response =  file_get_contents(SSOConfig::get('server') . '/api/session', false, stream_context_create(['http' => [
             'method'  => 'POST',
             'header'  => 'Content-Type: application/x-www-form-urlencoded',
             'timeout' => 60,
