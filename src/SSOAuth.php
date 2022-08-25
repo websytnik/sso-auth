@@ -22,8 +22,9 @@ class SSOAuth
             throw new Exception('Invalid Configuration');
         }
 
-        $this->detectAuthenticator();
-        $this->authenticator->auth();
+        if ($this->detectAuthenticator()) {
+            $this->authenticator->auth();
+        }
     }
 
     public function getIdentity()
@@ -36,7 +37,7 @@ class SSOAuth
         return isset($_COOKIE[SSOConfig::get('cookieName', 'session')]);
     }
 
-    protected function detectAuthenticator()
+    protected function detectAuthenticator() : bool
     {
         $authenticators = SSOConfig::get('authenticators', [
             SessionAuthenticator::class,
@@ -48,7 +49,10 @@ class SSOAuth
 
             if ($authenticator->can()) {
                 $this->authenticator = $authenticator;
+                return true;
             }
         }
+
+        return false;
     }
 }
