@@ -19,7 +19,7 @@ class SessionAuthenticator implements AuthenticatorInterface
             if (($identity = $this->fetch()) !== null) {
                 $_SESSION['sso'] = [
                     'identity' => $identity,
-                    'expired' => SSOConfig::get('sessionLifetime', 120)
+                    'expired' => time() + SSOConfig::get('sessionLifetime', 120)
                 ];
             }
         }
@@ -42,15 +42,19 @@ class SessionAuthenticator implements AuthenticatorInterface
 
     protected function fetch()
     {
-        $response =  file_get_contents(SSOConfig::get('server') . '/api/session', false, stream_context_create(['http' => [
-            'method'  => 'POST',
-            'header'  => 'Content-Type: application/x-www-form-urlencoded',
-            'timeout' => 60,
-            'content' => http_build_query([
-                'session' => $_COOKIE['session'],
-                'secret' => SSOConfig::get('secret')
-            ])]
-        ]));
+        try {
+            $response =  file_get_contents(SSOConfig::get('server') . '/api/session', false, stream_context_create(['http' => [
+                'method'  => 'POST',
+                'header'  => 'Content-Type: application/x-www-form-urlencoded',
+                'timeout' => 60,
+                'content' => http_build_query([
+                    'session' => $_COOKIE['session'],
+                    'secret' => SSOConfig::get('secret')
+                ])]
+            ]));
+        } catch (\Exception $exception) {
+            return null;
+        }
 
         if ($response) {
             return json_decode($response);
