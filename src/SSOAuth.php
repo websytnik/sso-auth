@@ -21,7 +21,6 @@ class SSOAuth
         if (SSOConfig::get('server') === null || SSOConfig::get('secret') === null) {
             throw new Exception('Invalid Configuration');
         }
-
         if ($this->detectAuthenticator()) {
             $this->authenticator->auth();
         }
