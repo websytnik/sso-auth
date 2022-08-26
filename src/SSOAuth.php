@@ -29,7 +29,11 @@ class SSOAuth
 
     public function getIdentity()
     {
-        return $_SESSION['sso']['identity'] ?? null;
+        if ($this->authenticator) {
+            return $this->authenticator->identity();
+        }
+
+        return null;
     }
 
     protected function hasCookie() : bool
@@ -41,7 +45,6 @@ class SSOAuth
     {
         $authenticators = SSOConfig::get('authenticators', [
             SessionAuthenticator::class,
-//            HttpBearerAuthenticator::class
         ]);
 
         foreach ($authenticators as $class) {

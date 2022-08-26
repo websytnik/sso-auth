@@ -21,6 +21,8 @@ class SessionAuthenticator implements AuthenticatorInterface
                     'identity' => $identity,
                     'expired' => time() + SSOConfig::get('sessionLifetime', 120)
                 ];
+            } elseif (isset($_SESSION['sso'])) {
+                unset($_SESSION['sso']);
             }
         }
     }
@@ -57,7 +59,7 @@ class SessionAuthenticator implements AuthenticatorInterface
         }
 
         if ($response) {
-            return json_decode($response);
+            return json_decode($response, true);
         }
 
         return null;
